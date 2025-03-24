@@ -1,13 +1,22 @@
-import { useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDebounce } from "use-debounce";
 
 interface SearchProps {
-  propExample: any;
+  query: string;
+  setQuery: Dispatch<SetStateAction<string>>;
 }
 
 export default function Search() {
   const [query, setQuery] = useState<string>("");
+
+  // const { query, setQuery } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [error, setError] = useState<boolean>(false);
@@ -52,10 +61,12 @@ export default function Search() {
         <input
           data-testid="search-input"
           placeholder="type to search.."
-          className="mx-4"
+          className="mx-4 focus:outline-none"
           type="text"
           value={query}
-          onChange={(e) => handleChange(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange(e.target.value)
+          }
         />
         {error && (
           <div className="text-red-700" data-testid="error-message">
@@ -71,8 +82,8 @@ export default function Search() {
       {/* <div className="mx-2">{query}</div> */}
       <>
         {data &&
-          data.slice(0, 5).map((el) => {
-            return <pre>{el.name}</pre>;
+          data.slice(0, 5).map((el, index) => {
+            return <pre key={index}>{el.name}</pre>;
           })}
       </>
     </>
